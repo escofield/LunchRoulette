@@ -1,5 +1,5 @@
 # LunchRoulette
 This is lunch roulette
 
-#Team Members
+# Team Members
 This is Joseph Wichman. GitHub: josephkwichman

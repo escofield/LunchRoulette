@@ -1,0 +1,60 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Lunch RouletteAPI
+  description: A slack API to generate random lunch locations using fluentMigrator. 
+  version: "1.0.0"
+# the domain of the service
+host: localhost
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+#basePath: /v1
+produces:
+  - application/json
+paths:
+  /Location:
+    get:
+      summary: Locations of places to eat
+      description: |
+        Location of places to eat.
+#      parameters:
+#        - name: blb
+      tags:
+        - Location
+      responses:
+        200:
+          description: An array of locations
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Location'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Location:
+    type: object
+    properties:
+      locationId:
+        type: number
+        description: Unique identifier representing a specific location.
+      description:
+        type: string
+        description: Description of location.
+      displayName:
+        type: string
+        description: Display name of location.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

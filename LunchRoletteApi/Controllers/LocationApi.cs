@@ -44,5 +44,24 @@ namespace IO.Swagger.Controllers
 
             return Json(lr.GetLocations());
         }
+
+        /// <summary>
+        /// Random Lunch Location
+        /// </summary>
+        ///  /// <remarks>A random lunch location. </remarks>
+        /// <response code="200">One location</response>
+        /// <response code="0">Unexpected error</response>
+        [HttpGet]
+        [Route("/Lunch")]
+        [ProducesResponseType(typeof(string), 200)]
+        public virtual IActionResult LunchGet()
+        {
+            var lr = new LocationRepository();
+
+            return Json(lr.GetLunch().DisplayName);
+        }
+
+
+
     }
 }

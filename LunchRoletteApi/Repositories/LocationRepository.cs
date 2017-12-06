@@ -21,5 +21,14 @@ namespace LunchRoletteApi.Repositories
         {
             return _session.QueryOver<Location>().List();
         }
+
+        public Location GetLunch()
+        {
+            var locations = GetLocations();
+            var random = new Random().Next(0, locations.Count - 1);
+            return locations[random];
+        }
+
+       
     }
 }

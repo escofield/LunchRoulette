@@ -27,14 +27,20 @@ namespace IO.Swagger.Models
     [DataContract]
     public partial class Location :  IEquatable<Location>
     {
-
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public Location()
+        {
+            ;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Location" /> class.
         /// </summary>
         /// <param name="LocationId">Unique identifier representing a specific location..</param>
         /// <param name="Description">Description of location..</param>
         /// <param name="DisplayName">Display name of location..</param>
-        public Location(decimal? LocationId = default(decimal?), string Description = default(string), string DisplayName = default(string))
+        public Location(int? LocationId = default(int?), string Description = default(string), string DisplayName = default(string))
         {
             this.LocationId = LocationId;
             this.Description = Description;
@@ -47,7 +53,7 @@ namespace IO.Swagger.Models
         /// </summary>
         /// <value>Unique identifier representing a specific location.</value>
         [DataMember(Name="locationId")]
-        public decimal? LocationId { get; set; }
+        public int? LocationId { get; set; }
         /// <summary>
         /// Description of location.
         /// </summary>

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using IO.Swagger.Models;
+using LunchRoletteApi.Repositories;
 
 namespace IO.Swagger.Controllers
 { 
@@ -38,13 +39,10 @@ namespace IO.Swagger.Controllers
         [Route("/Location")]
         [ProducesResponseType(typeof(List<Location>), 200)]
         public virtual IActionResult LocationGet()
-        { 
-            string exampleJson = null;
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<Location>>(exampleJson)
-            : default(List<Location>);
-            return new ObjectResult(example);
+        {
+            var lr = new LocationRepository();
+
+            return Json(lr.GetLocations());
         }
     }
 }

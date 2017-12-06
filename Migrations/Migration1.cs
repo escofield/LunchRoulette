@@ -47,7 +47,8 @@ namespace LunchRoletteApi.Migrations
 
         public override void Down()
         {
-            Delete.FromTable("Location");
+            Delete.FromTable("Location").Row(new { locationId = 1 });
+            Delete.FromTable("Location").Row(new { locationId = 2 });
         }
     }
 

@@ -40,7 +40,7 @@
 
   <ItemGroup>
     <Reference Include="Oracle.DataAccess">
-      <HintPath>..\..\..\oracle\product\11.2.0\client\odp.net\bin\2.x\Oracle.DataAccess.dll</HintPath>
+      <HintPath>..\Lib\Oracle.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
   </ItemGroup>

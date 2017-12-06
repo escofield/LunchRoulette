@@ -12,6 +12,8 @@ using Swashbuckle.AspNetCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Swashbuckle.AspNetCore.Swagger;
+using LunchRoletteApi.Repositories;
+
 namespace LunchRoletteApi
 {
     public class Startup
@@ -31,7 +33,8 @@ namespace LunchRoletteApi
             {
                 c.SwaggerDoc("v1", new Info { Title = "Lunch Roulette", Version = "v1" });
             });
-        }
+            new MigrationsWrapper("data source=dev1;User id=jj07035;Password=reem7035;").MigrateToLatestVersion();
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

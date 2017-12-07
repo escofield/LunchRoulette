@@ -89,4 +89,22 @@ namespace LunchRoletteApi.Migrations
             }
         }
     }
+
+    [Migration(6)]
+    public class Migration6 : Migration
+    {
+        public override void Up()
+        {
+            Create.Table("TodaysLunch")
+                .WithColumn("todaysLunchId").AsInt32().NotNullable().PrimaryKey()
+                .WithColumn("lunchDate").AsDate().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("displayName").AsString(255)
+                .WithColumn("upCount").AsInt32()
+                .WithColumn("downCount").AsInt32();
+        }
+        public override void Down()
+        {
+            Delete.Table("TodaysLunch");
+        }
+    }
 }

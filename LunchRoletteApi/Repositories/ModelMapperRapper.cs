@@ -10,6 +10,7 @@ namespace LunchRoletteApi.Repositories
         {
             var mm = new ModelMapper();
             mm.AddMapping<LocationMapping>();
+            mm.AddMapping<TodaysLunchMapping>();
             return mm.CompileMappingForAllExplicitlyAddedEntities();
         }  
     }

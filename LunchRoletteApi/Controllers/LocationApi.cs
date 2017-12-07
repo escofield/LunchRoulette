@@ -95,7 +95,7 @@ namespace IO.Swagger.Controllers
         private IActionResult RandomLunch()
         {
             var lr = new LocationRepository();
-            return Json(new SlackResult() { text = lr.GetLunch().DisplayName });
+            return Json(new SlackResult() { text = lr.GetLunch() });
         }
 
     }

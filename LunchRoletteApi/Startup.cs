@@ -33,7 +33,7 @@ namespace LunchRoletteApi
             {
                 c.SwaggerDoc("v1", new Info { Title = "Lunch Roulette", Version = "v1" });
             });
-            new MigrationsWrapper("data source=dev1;User id=jj07035;Password=reem7035;").MigrateToLatestVersion();
+            new MigrationsWrapper(RepoMeta.connectionString).MigrateToLatestVersion();
     }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -54,7 +54,7 @@ namespace IO.Swagger.Controllers
         [HttpGet]
         [Route("/Lunch")]
         [ProducesResponseType(typeof(string), 200)]
-        public virtual IActionResult LunchGet()
+        public virtual IActionResult LunchGet(string channel_name, string text)
         {
             var lr = new LocationRepository();
 

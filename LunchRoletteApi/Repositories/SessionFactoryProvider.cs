@@ -7,6 +7,12 @@ using System.Web;
 
 namespace LunchRoletteApi.Repositories
 {
+
+    public static class RepoMeta
+    {
+        public static string connectionString = "data source=dev1;User id=jj07035;Password=reem7035;";
+        //public static string connectionString = "Data Source=localhost:1521/Default;Persist Security Info=True;User ID=LunchRoulette;Password=Default1;";
+    }
     public class SessionFactoryProvider
     {
         class SqlStatementInterceptor : EmptyInterceptor
@@ -57,7 +63,7 @@ namespace LunchRoletteApi.Repositories
             //configuration.SetInterceptor(new SqlStatementInterceptor());
             configuration.DataBaseIntegration(db =>
             {
-                db.ConnectionString = "data source=dev1;User id=jj07035;Password=reem7035;";
+                db.ConnectionString = RepoMeta.connectionString;
                 db.Driver<OracleClientDriver>();
                 db.Dialect<Oracle10gDialect>();
                 db.LogSqlInConsole = false; /* If you need to debug queries you can set this property to "True" */

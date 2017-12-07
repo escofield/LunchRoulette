@@ -20,15 +20,15 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using IO.Swagger.Models;
 using LunchRoletteApi.Repositories;
-
+using LunchRoletteApi.Models;
 namespace IO.Swagger.Controllers
-{ 
+{
     /// <summary>
     /// 
     /// </summary>
     public class LocationApiController : Controller
-    { 
-
+    {
+        private static string Help = "Lunch Bot\n/Lunch -where  : return location\n/Lunch -add -n {Name} -d {Description}\n/Lunch -up     : Vote up location\n/Lunch -down   : Vote down location\n/Lunch -list   : show all locations";
         /// <summary>
         /// Locations of places to eat
         /// </summary>
@@ -40,11 +40,19 @@ namespace IO.Swagger.Controllers
         [ProducesResponseType(typeof(List<Location>), 200)]
         public virtual IActionResult LocationGet()
         {
-            var lr = new LocationRepository();
-
-            return Json(lr.GetLocations());
+            return LunchList();
         }
-
+        
+        private IActionResult LunchList()
+        {
+            var lr = new LocationRepository();
+            var result = new SlackResult();
+            result.attachments = lr.GetLocations().Select(r =>
+            {
+                return new SlackAttachment() { text = $"{r.DisplayName} - {r.Description}" };
+            }).ToList();
+            return Json(result);
+        }
         /// <summary>
         /// Random Lunch Location
         /// </summary>
@@ -54,23 +62,41 @@ namespace IO.Swagger.Controllers
         [HttpGet]
         [Route("/Lunch")]
         [ProducesResponseType(typeof(string), 200)]
-        public virtual IActionResult LunchGet(string channel_name, string text)
+        public virtual IActionResult LunchGet(string channel_name = null, string text = null)
         {
-            var lr = new LocationRepository();
-
-            return Json(lr.GetLunch().DisplayName);
+            var parameters = Parameter.ParseParameters(text);
+            if(parameters.Count > 0)
+            {
+                switch (parameters[0].Name.ToLower())
+                {
+                    case "add":
+                        return LunchAdd(parameters);
+                        break;
+                    case "where":
+                        return RandomLunch();
+                        break;
+                    case "list":
+                        return LunchList();
+                        break;
+                }
+            }
+            return Json(new SlackResult() { text = Help });
         }
 
-        [HttpPost]
-        [Route("/AddLunch")]
-        [ProducesResponseType(typeof(string), 200)]
-        public virtual string LunchAdd(string name, string description)
+
+        private IActionResult LunchAdd(List<Parameter> parameters)
         {
+            string name = parameters.FindParameter("n").Value;
+            string description = parameters.FindParameter("d").Value;
             var lr = new LocationRepository();
             lr.AddLunch(name, description);
-            return name;
+            return Json(new SlackResult() { text = "Great!" });
         }
-
+        private IActionResult RandomLunch()
+        {
+            var lr = new LocationRepository();
+            return Json(new SlackResult() { text = lr.GetLunch().DisplayName });
+        }
 
     }
 }

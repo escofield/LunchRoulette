@@ -61,6 +61,15 @@ namespace IO.Swagger.Controllers
             return Json(lr.GetLunch().DisplayName);
         }
 
+        [HttpPost]
+        [Route("/AddLunch")]
+        [ProducesResponseType(typeof(string), 200)]
+        public virtual string LunchAdd(string name, string description)
+        {
+            var lr = new LocationRepository();
+            lr.AddLunch(name, description);
+            return name;
+        }
 
 
     }

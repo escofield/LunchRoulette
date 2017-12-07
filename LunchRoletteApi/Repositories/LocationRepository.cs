@@ -28,7 +28,22 @@ namespace LunchRoletteApi.Repositories
             var random = new Random().Next(0, locations.Count - 1);
             return locations[random];
         }
+       
+        public void AddLunch(string name, string description)
+        {
+            var newLocation = new Location
+            {
+                LocationId = GetLocations().Count + 1,
+                DisplayName = name,
+                Description = description
+            };
 
+            _session.SaveOrUpdate(newLocation);
+            _session.BeginTransaction().Commit();
+
+           
+            
+        }
        
     }
 }

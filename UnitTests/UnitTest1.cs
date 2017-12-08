@@ -10,7 +10,7 @@ namespace UnitTests
         [TestMethod]
         public void TestMethod1()
         {
-            var list = Parameter.ParseParameters("-vote somethinghere -bob anotehr command -joseph what are you doing on your phone.");
+            var list = Parameter.ParseParameters("-vote somethinghere -bob anotehr command -bill what are you doing on your phone.");
             list = Parameter.ParseParameters(null);
             list = Parameter.ParseParameters("");
         }

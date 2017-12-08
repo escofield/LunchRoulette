@@ -50,7 +50,7 @@ namespace IO.Swagger.Controllers
             result.attachments = lr.GetLocations().Select(r =>
             {
                 return new SlackAttachment() { text = $"{r.DisplayName} - {r.Description}" };
-            }).ToList();
+            }).OrderBy(r => r.text).ToList();
             return Json(result);
         }
         /// <summary>

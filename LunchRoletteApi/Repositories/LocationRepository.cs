@@ -24,14 +24,19 @@ namespace LunchRoletteApi.Repositories
             return _session.QueryOver<Location>().List();
         }
 
-        public string GetLunch()
+        private TodaysLunch TodaysLunch()
         {
-            var todaysLunch = _session.QueryOver<TodaysLunch>().List().FirstOrDefault(x => x.LunchDate.ToShortDateString() == DateTime.Today.ToShortDateString());
+            return _session.QueryOver<TodaysLunch>().List().FirstOrDefault(x => x.LunchDate.ToShortDateString() == DateTime.Today.ToShortDateString());
+        }
+        public (TodaysLunch, Location) GetLunch()
+        {
+            var todaysLunch = TodaysLunch();
+            Location lunchLocation;
             if (todaysLunch == null)
             {
                 var locations = GetLocations();
                 var random = new Random().Next(0, locations.Count - 1);
-                var lunchLocation = locations[random];
+                lunchLocation = locations[random];
                 var lunches = _session.QueryOver<TodaysLunch>().List().Select(x => x.TodaysLunchId);
                 var newlunchId = lunches.Any() ? lunches.Max() + 1 : 1;
                 todaysLunch = new TodaysLunch()
@@ -44,7 +49,12 @@ namespace LunchRoletteApi.Repositories
                 _session.SaveOrUpdate(todaysLunch);
                 _session.BeginTransaction().Commit();
             }
-            return todaysLunch.DisplayName;
+            else
+            {
+                var locations = GetLocations();
+                lunchLocation = _session.QueryOver<Location>().List().FirstOrDefault(x => x.DisplayName == todaysLunch.DisplayName);
+            }
+            return (todaysLunch,lunchLocation) ;
         }
        
         public void AddLunch(string name, string description)
@@ -55,12 +65,34 @@ namespace LunchRoletteApi.Repositories
                 DisplayName = name,
                 Description = description
             };
-
             _session.SaveOrUpdate(newLocation);
             _session.BeginTransaction().Commit();
+        }
 
-           
-            
+        public bool VoteUp()
+        {
+            var todaysLunch = TodaysLunch();
+            if (todaysLunch != null)
+            {
+                todaysLunch.UpCount++;
+                _session.SaveOrUpdate(todaysLunch);
+                _session.BeginTransaction().Commit();
+                return true;
+            }
+            return false;
+        }
+
+        public bool VoteDown()
+        {
+            var todaysLunch = TodaysLunch();
+            if (todaysLunch != null)
+            {
+                todaysLunch.DownCount++;
+                _session.SaveOrUpdate(todaysLunch);
+                _session.BeginTransaction().Commit();
+                return true;
+            }
+            return false;
         }
        
     }

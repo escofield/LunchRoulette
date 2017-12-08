@@ -64,6 +64,7 @@ namespace IO.Swagger.Controllers
         [ProducesResponseType(typeof(string), 200)]
         public virtual IActionResult LunchGet(string channel_name = null, string text = null)
         {
+            var lr = new LocationRepository();
             var parameters = Parameter.ParseParameters(text);
             if(parameters.Count > 0)
             {
@@ -78,11 +79,33 @@ namespace IO.Swagger.Controllers
                     case "list":
                         return LunchList();
                         break;
+                    case "vote":
+                        return Vote(lr, parameters);
                 }
             }
             return Json(new SlackResult() { text = Help });
         }
 
+        private IActionResult Vote(LocationRepository lr, List<Parameter> parameters)
+        {
+            var result = true;
+            if (parameters[0].Value.ToLower() == "down")
+            {
+                result = lr.VoteDown();
+            }
+            else
+            {
+                result = lr.VoteUp();
+            }
+            if (result)
+            {
+                return Json(new SlackResult() { text = "Your vote was recorded." });
+            }
+            else
+            {
+                return Json(new SlackResult() { text = "No todays lunch selected." });
+            }
+        }
 
         private IActionResult LunchAdd(List<Parameter> parameters)
         {
@@ -95,7 +118,17 @@ namespace IO.Swagger.Controllers
         private IActionResult RandomLunch()
         {
             var lr = new LocationRepository();
-            return Json(new SlackResult() { text = lr.GetLunch() });
+            (var t, var l) = lr.GetLunch();
+            var attachments = new List<SlackAttachment>()
+            {
+                new SlackAttachment() { text = l.Description },
+                new SlackAttachment() { text = $"Votes down: {t.DownCount}" },
+                new SlackAttachment() { text = $"Votes Up: {t.UpCount}" } };
+            
+            return Json(new SlackResult() {
+                text = t.DisplayName
+                , attachments = attachments
+            });
         }
 
     }
